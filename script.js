@@ -1,14 +1,14 @@
 container = document.querySelector('.container');
 
 
-
 //Factory function, each empty array slot is a board slot
 let gameBoard = (() => {
     let board = [];
     for (let i = 0; i < 9; i++) {
         board.push("");
         createDiv = document.createElement('div');
-        createDiv.classList.add(`tiles`, `div${i}`);
+        createDiv.classList.add(`tiles`);
+        createDiv.setAttribute('data-index', `${i}`);
         
         container.appendChild(createDiv);
         
@@ -25,12 +25,9 @@ const players = {
 
 
 const gameController = {
-    x: 0,
-    o: 0,
     index: 0,
     counter: 0,
-
-    //adds player symbol to the board, alternating between player with a counter
+    //adds player symbol to the board, alternating between player with a counter++
     playerMove: (index) => {
         //if counter is even
         if (gameController.counter % 2 === 0 &&
@@ -39,6 +36,7 @@ const gameController = {
             //add player 1 to the board
             gameBoard.board[index] = players.player1;
             gameController.counter++;
+            
 
             //else if its odd and empty, add player 2
         } else if (gameBoard.board[index] === '') {
@@ -54,10 +52,13 @@ const gameController = {
     resetBoard: ()=> {
         gameBoard.board = [];
         for (i = 0; i < 9; i ++) {
-            gameBoard.board.push('')
+            gameBoard.board.push('');
         }
-    }
-
+        tiles = document.querySelectorAll('.tiles');
+        tiles.forEach(index => {
+            index.textContent = ''});
+    },
+    
 };
 
 const gameLogic = {
@@ -95,5 +96,24 @@ const gameLogic = {
         }
         return false;
     }
-}
+};
 
+//on click get attribbute of tile, use that as a parameter for the player move function, inputting x/o into the array
+let display = {
+
+
+onClick: document.body.addEventListener('click', (e) => {
+    let index = e.target.getAttribute('data-index');
+    let tile = document.querySelector(`[data-index='${index}']`);;
+    console.log(index)
+    gameController.playerMove(index);
+    if (gameBoard.board[index] === "o") {
+        tile.textContent = 'o';
+    } else if (gameBoard.board[index] === "x") {
+        tile.textContent = 'x';
+    }
+
+   
+})
+
+}; 
