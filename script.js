@@ -9,9 +9,9 @@ let gameBoard = (() => {
         createDiv = document.createElement('div');
         createDiv.classList.add(`tiles`);
         createDiv.setAttribute('data-index', `${i}`);
-        
+
         container.appendChild(createDiv);
-        
+
     }
     return { board };
 })();
@@ -36,7 +36,7 @@ const gameController = {
             //add player 1 to the board
             gameBoard.board[index] = players.player1;
             gameController.counter++;
-            
+
 
             //else if its odd and empty, add player 2
         } else if (gameBoard.board[index] === '') {
@@ -49,16 +49,17 @@ const gameController = {
         gameLogic.checkWin();
     },
 
-    resetBoard: ()=> {
+    resetBoard: () => {
         gameBoard.board = [];
-        for (i = 0; i < 9; i ++) {
+        for (i = 0; i < 9; i++) {
             gameBoard.board.push('');
         }
         tiles = document.querySelectorAll('.tiles');
         tiles.forEach(index => {
-            index.textContent = ''});
+            index.textContent = ''
+        });
     },
-    
+
 };
 
 const gameLogic = {
@@ -102,18 +103,36 @@ const gameLogic = {
 let display = {
 
 
-onClick: document.body.addEventListener('click', (e) => {
-    let index = e.target.getAttribute('data-index');
-    let tile = document.querySelector(`[data-index='${index}']`);;
-    console.log(index)
-    gameController.playerMove(index);
-    if (gameBoard.board[index] === "o") {
-        tile.textContent = 'o';
-    } else if (gameBoard.board[index] === "x") {
-        tile.textContent = 'x';
-    }
+    onClick: document.body.addEventListener('click', (e) => {
+        let index = e.target.getAttribute('data-index');
+        let tile = document.querySelector(`[data-index='${index}']`);;
+        console.log(index)
+        gameController.playerMove(index);
+        if (gameBoard.board[index] === "o") {
+            
+            const img = document.createElement('img');
+            img.src = 'x-and-o.png'; // Replace with your image URL
+            img.alt = 'o'; // Optional: accessibility text
+            img.width = 50; // Set width if needed
+            img.height = 50; // Set height if needed
 
-   
-})
+            // Clear text content and append image
+            tile.textContent = '';
+            tile.appendChild(img);
+        } else if (gameBoard.board[index] === "x") {
+            
+            const img = document.createElement('img');
+            img.src = 'x.png'; // Replace with your image URL
+            img.alt = 'x'; // Optional: accessibility text
+            img.width = 50; // Set width if needed
+            img.height = 50; // Set height if needed
+
+            // Clear text content and append image
+            tile.textContent = '';
+            tile.appendChild(img);
+        }
+
+
+    })
 
 }; 
