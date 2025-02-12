@@ -62,6 +62,8 @@ const gameController = {
 
 };
 
+
+
 const gameLogic = {
     checkWin: () => {
         // Check rows for matching x / o
@@ -94,6 +96,10 @@ const gameLogic = {
             console.log("We got a wiener!");
             gameController.resetBoard();
             return true;
+        }
+
+        if (gameBoard.board.every(index => index !== '')) {
+            gameController.resetBoard();
         }
         return false;
     }

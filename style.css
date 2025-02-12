@@ -12,6 +12,9 @@
     width: 100%;
     height: 200px;
     border: solid black 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* .tiles {
