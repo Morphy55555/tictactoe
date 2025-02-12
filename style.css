@@ -1,0 +1,15 @@
+
+
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    width: 70vw;
+}
+
+.tiles {
+    width: 100%;
+    height: 200px;
+    border: solid black 1px;
+}
