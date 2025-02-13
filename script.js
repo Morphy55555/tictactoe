@@ -60,6 +60,7 @@ const gameController = {
         tiles.forEach(index => {
             index.textContent = ''
         });
+        document.body.addEventListener('click', display.onClick);
     },
 
 };
@@ -70,9 +71,11 @@ const gameController = {
 let display = {
 
 
-    onClick: document.body.addEventListener('click', (e) => {
+    onClick: function (e) {
         let index = e.target.getAttribute('data-index');
         let tile = document.querySelector(`[data-index='${index}']`);
+        console.log(`Tile clicked: ${index}`);
+    
 
         console.log(index)
         gameController.playerMove(index);
@@ -93,7 +96,10 @@ let display = {
             tile.appendChild(img);
         }
         gameLogic.checkWin()
-    }),
+        
+    },
+    
+
     displayScore: () => {
         let displayPlayer1Score = document.querySelector('#player1');
         let displayPlayer2Score = document.querySelector('#player2');
@@ -119,9 +125,11 @@ const gameLogic = {
             if (gameController.counter % 2 === 0) {
                 players.player2Score++;
                 alert("Player 2 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
             } else {
                 players.player1Score++;
                 alert("Player 1 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
             }
             
         }
@@ -134,12 +142,13 @@ const gameLogic = {
         ) {
             if (gameController.counter % 2 === 0) {
                 players.player2Score++;
-
                 alert("Player 2 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
 
             } else {
                 players.player1Score++;
                 alert("Player 1 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
             }
 
 
@@ -154,9 +163,11 @@ const gameLogic = {
                 players.player2Score++;
 
                 alert("Player 2 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
             } else {
                 players.player1Score++;
                 alert("Player 1 is the weiner!");
+                document.body.removeEventListener('click', display.onClick);
             }
 
 
@@ -169,5 +180,6 @@ const gameLogic = {
         display.displayScore();
     }
 };
+document.body.addEventListener('click', display.onClick);
 
 
