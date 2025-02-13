@@ -1,5 +1,6 @@
 container = document.querySelector('.container');
 resetBtn = document.querySelector('.resetBtn');
+// score = document.querySelector('.score');
 
 //Factory function, each empty array slot is a board slot
 let gameBoard = (() => {
@@ -20,8 +21,9 @@ console.log(gameBoard.board);
 
 const players = {
     player1: 'x',
-    player2: 'o', 
-    
+    player2: 'o',
+    player1Score: 0,
+    player2Score: 0
 }
 
 
@@ -70,33 +72,40 @@ let display = {
 
     onClick: document.body.addEventListener('click', (e) => {
         let index = e.target.getAttribute('data-index');
-        let tile = document.querySelector(`[data-index='${index}']`);;
+        let tile = document.querySelector(`[data-index='${index}']`);
+
         console.log(index)
         gameController.playerMove(index);
         if (gameBoard.board[index] === "o") {
-            
+
             const img = document.createElement('img');
-            img.src = 'x-and-o.png'; 
+            img.src = 'x-and-o.png';
             img.alt = 'o';
             img.width = 50;
             tile.appendChild(img);
         } else if (gameBoard.board[index] === "x") {
-            
+
             const img = document.createElement('img');
-            img.src = 'x.png'; 
-            img.alt = 'x'; 
-            img.width = 50; 
-            img.height = 50; 
+            img.src = 'x.png';
+            img.alt = 'x';
+            img.width = 50;
+            img.height = 50;
             tile.appendChild(img);
         }
         gameLogic.checkWin()
     }),
-    
-    reset: resetBtn.addEventListener('click', ()=> {
+    displayScore: () => {
+        let displayPlayer1Score = document.querySelector('#player1');
+        let displayPlayer2Score = document.querySelector('#player2');
+        displayPlayer1Score.textContent = players.player1Score;
+        displayPlayer2Score.textContent = players.player2Score;
+    },
+
+    reset: resetBtn.addEventListener('click', () => {
         gameController.resetBoard();
     }),
-    
-}; 
+
+};
 
 const gameLogic = {
     checkWin: () => {
@@ -105,14 +114,16 @@ const gameLogic = {
             (gameBoard.board[0] === gameBoard.board[1] && gameBoard.board[1] === gameBoard.board[2] && gameBoard.board[0] !== '') ||
             (gameBoard.board[3] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[5] && gameBoard.board[3] !== '') ||
             (gameBoard.board[6] === gameBoard.board[7] && gameBoard.board[7] === gameBoard.board[8] && gameBoard.board[6] !== '')
-            
+
         ) {
             if (gameController.counter % 2 === 0) {
-            alert("Player 2 is the weiner!");
+                players.player2Score++;
+                alert("Player 2 is the weiner!");
             } else {
+                players.player1Score++;
                 alert("Player 1 is the weiner!");
             }
-         
+            
         }
 
         // Check columns
@@ -122,12 +133,16 @@ const gameLogic = {
             (gameBoard.board[2] === gameBoard.board[5] && gameBoard.board[5] === gameBoard.board[8] && gameBoard.board[2] !== '')
         ) {
             if (gameController.counter % 2 === 0) {
+                players.player2Score++;
+
                 alert("Player 2 is the weiner!");
-                } else {
-                    alert("Player 1 is the weiner!");
-                }
-            
-           
+
+            } else {
+                players.player1Score++;
+                alert("Player 1 is the weiner!");
+            }
+
+
         }
 
         // Check diagonals
@@ -136,19 +151,22 @@ const gameLogic = {
             (gameBoard.board[2] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[6] && gameBoard.board[2] !== '')
         ) {
             if (gameController.counter % 2 === 0) {
+                players.player2Score++;
+
                 alert("Player 2 is the weiner!");
-                } else {
-                    alert("Player 1 is the weiner!");
-                }
-            
-          
+            } else {
+                players.player1Score++;
+                alert("Player 1 is the weiner!");
+            }
+
+
         }
 
         if (gameBoard.board.every(index => index !== '')) {
             alert('It\'s a draw, go agannnee!')
-            
+
         }
-        
+        display.displayScore();
     }
 };
 

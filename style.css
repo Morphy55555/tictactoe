@@ -83,3 +83,13 @@ body {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
 }
+
+.score {
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
