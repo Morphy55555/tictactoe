@@ -1,5 +1,5 @@
 container = document.querySelector('.container');
-
+resetBtn = document.querySelector('.resetBtn');
 
 //Factory function, each empty array slot is a board slot
 let gameBoard = (() => {
@@ -20,7 +20,8 @@ console.log(gameBoard.board);
 
 const players = {
     player1: 'x',
-    player2: 'o'
+    player2: 'o', 
+    
 }
 
 
@@ -44,9 +45,8 @@ const gameController = {
             gameController.counter++;
 
         } else return;
-
         console.log(gameBoard.board);
-        gameLogic.checkWin();
+        console.log(gameController.counter);
     },
 
     resetBoard: () => {
@@ -63,49 +63,8 @@ const gameController = {
 };
 
 
-
-const gameLogic = {
-    checkWin: () => {
-        // Check rows for matching x / o
-        if (
-            (gameBoard.board[0] === gameBoard.board[1] && gameBoard.board[1] === gameBoard.board[2] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[3] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[5] && gameBoard.board[3] !== '') ||
-            (gameBoard.board[6] === gameBoard.board[7] && gameBoard.board[7] === gameBoard.board[8] && gameBoard.board[6] !== '')
-        ) {
-            console.log("We got a wiener!");
-            gameController.resetBoard();
-            return true;
-        }
-
-        // Check columns
-        if (
-            (gameBoard.board[0] === gameBoard.board[3] && gameBoard.board[3] === gameBoard.board[6] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[1] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[7] && gameBoard.board[1] !== '') ||
-            (gameBoard.board[2] === gameBoard.board[5] && gameBoard.board[5] === gameBoard.board[8] && gameBoard.board[2] !== '')
-        ) {
-            console.log("We got a wiener!");
-            gameController.resetBoard();
-            return true;
-        }
-
-        // Check diagonals
-        if (
-            (gameBoard.board[0] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[8] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[2] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[6] && gameBoard.board[2] !== '')
-        ) {
-            console.log("We got a wiener!");
-            gameController.resetBoard();
-            return true;
-        }
-
-        if (gameBoard.board.every(index => index !== '')) {
-            gameController.resetBoard();
-        }
-        return false;
-    }
-};
-
-//on click get attribbute of tile, use that as a parameter for the player move function, inputting x/o into the array
+//on click get attribbute of tile which matches the index of the gameBoard array, 
+//Then inputting x/o into the array with the playerMove() and adding to the onscreen display
 let display = {
 
 
@@ -117,28 +76,80 @@ let display = {
         if (gameBoard.board[index] === "o") {
             
             const img = document.createElement('img');
-            img.src = 'x-and-o.png'; // Replace with your image URL
-            img.alt = 'o'; // Optional: accessibility text
-            img.width = 50; // Set width if needed
-            img.height = 50; // Set height if needed
-
-            // Clear text content and append image
-            tile.textContent = '';
+            img.src = 'x-and-o.png'; 
+            img.alt = 'o';
+            img.width = 50;
             tile.appendChild(img);
         } else if (gameBoard.board[index] === "x") {
             
             const img = document.createElement('img');
-            img.src = 'x.png'; // Replace with your image URL
-            img.alt = 'x'; // Optional: accessibility text
-            img.width = 50; // Set width if needed
-            img.height = 50; // Set height if needed
-
-            // Clear text content and append image
-            tile.textContent = '';
+            img.src = 'x.png'; 
+            img.alt = 'x'; 
+            img.width = 50; 
+            img.height = 50; 
             tile.appendChild(img);
         }
-
-
-    })
-
+        gameLogic.checkWin()
+    }),
+    
+    reset: resetBtn.addEventListener('click', ()=> {
+        gameController.resetBoard();
+    }),
+    
 }; 
+
+const gameLogic = {
+    checkWin: () => {
+        // Check rows for matching x / o
+        if (
+            (gameBoard.board[0] === gameBoard.board[1] && gameBoard.board[1] === gameBoard.board[2] && gameBoard.board[0] !== '') ||
+            (gameBoard.board[3] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[5] && gameBoard.board[3] !== '') ||
+            (gameBoard.board[6] === gameBoard.board[7] && gameBoard.board[7] === gameBoard.board[8] && gameBoard.board[6] !== '')
+            
+        ) {
+            if (gameController.counter % 2 === 0) {
+            alert("Player 2 is the weiner!");
+            } else {
+                alert("Player 1 is the weiner!");
+            }
+         
+        }
+
+        // Check columns
+        if (
+            (gameBoard.board[0] === gameBoard.board[3] && gameBoard.board[3] === gameBoard.board[6] && gameBoard.board[0] !== '') ||
+            (gameBoard.board[1] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[7] && gameBoard.board[1] !== '') ||
+            (gameBoard.board[2] === gameBoard.board[5] && gameBoard.board[5] === gameBoard.board[8] && gameBoard.board[2] !== '')
+        ) {
+            if (gameController.counter % 2 === 0) {
+                alert("Player 2 is the weiner!");
+                } else {
+                    alert("Player 1 is the weiner!");
+                }
+            
+           
+        }
+
+        // Check diagonals
+        if (
+            (gameBoard.board[0] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[8] && gameBoard.board[0] !== '') ||
+            (gameBoard.board[2] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[6] && gameBoard.board[2] !== '')
+        ) {
+            if (gameController.counter % 2 === 0) {
+                alert("Player 2 is the weiner!");
+                } else {
+                    alert("Player 1 is the weiner!");
+                }
+            
+          
+        }
+
+        if (gameBoard.board.every(index => index !== '')) {
+            alert('It\'s a draw, go agannnee!')
+            
+        }
+        
+    }
+};
+
+
