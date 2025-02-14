@@ -1,8 +1,9 @@
 container = document.querySelector('.container');
 resetBtn = document.querySelector('.resetBtn');
-// score = document.querySelector('.score');
 
-//Factory function, each empty array slot is a board slot
+
+//Factory function, creating 9 empty board slots with an array
+//Creating the same amount of div tiles for display of the board
 let gameBoard = (() => {
     let board = [];
     for (let i = 0; i < 9; i++) {
@@ -60,15 +61,16 @@ const gameController = {
         tiles.forEach(index => {
             index.textContent = ''
         });
-        //Re add event listener
+        //Re add event listener 
         document.body.addEventListener('click', display.onClick);
     },
 
 };
 
 
-//on click get attribbute of tile which matches the index of the gameBoard array, 
-//Then inputting x/o into the array with the playerMove() and adding to the onscreen display
+//On click get data attribbute of tile
+//Then inputting x/o into the gameboard array with the playerMove() function
+//Lastly adding corresponding image to the onscreen display
 let display = {
 
 
@@ -78,12 +80,12 @@ let display = {
         console.log(`Tile clicked: ${index}`);
     
 
-        console.log(index)
+        
         gameController.playerMove(index);
         if (gameBoard.board[index] === "o") {
 
             const img = document.createElement('img');
-            img.src = 'x-and-o.png';
+            img.src = 'o.png';
             img.alt = 'o';
             img.width = 50;
             tile.appendChild(img);
@@ -174,7 +176,7 @@ const gameLogic = {
             return;
 
         }
-
+        //If all gameboard[] are not empty, its a draw, go aganeeee
         if (gameBoard.board.every(index => index !== '')) {
             alert('It\'s a draw, go agannnee!');
             return;
