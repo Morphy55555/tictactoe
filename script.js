@@ -68,28 +68,32 @@ const gameController = {
 };
 
 
-//On click get data attribbute of tile
-//Then inputting x/o into the gameboard array with the playerMove() function
+
+
 //Lastly adding corresponding image to the onscreen display
 let display = {
 
 
     onClick: function (e) {
+        //On click get data attribbute of tile
         let index = e.target.getAttribute('data-index');
+        //Select that specific tile with the data index
         let tile = document.querySelector(`[data-index='${index}']`);
         console.log(`Tile clicked: ${index}`);
     
 
-        
+        //Add either x or o into the tile (index) with the playermove function
         gameController.playerMove(index);
-        if (gameBoard.board[index] === "o") {
+        //If the tile === o and there isn't an image there currently
+        //Add it to the display
+        if (gameBoard.board[index] === "o" && !tile.firstChild) {
 
             const img = document.createElement('img');
             img.src = 'o.png';
             img.alt = 'o';
             img.width = 50;
             tile.appendChild(img);
-        } else if (gameBoard.board[index] === "x") {
+        } else if (gameBoard.board[index] === "x" && !tile.firstChild) {
 
             const img = document.createElement('img');
             img.src = 'x.png';
@@ -135,6 +139,7 @@ const gameLogic = {
                 alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
+            display.displayScore();
             return;
         }
 
@@ -154,6 +159,7 @@ const gameLogic = {
                 alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
+            display.displayScore();
             return;
 
         }
@@ -173,6 +179,7 @@ const gameLogic = {
                 alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
+            display.displayScore();
             return;
 
         }
@@ -181,7 +188,7 @@ const gameLogic = {
             alert('It\'s a draw, go agannnee!');
             return;
         }
-        display.displayScore();
+        
     }
 };
 document.body.addEventListener('click', display.onClick);
