@@ -85,11 +85,19 @@ body {
 }
 
 .score {
-    background: #007bff;
+    background: #5f6061;
     color: white;
     padding: 8px 16px;
-    border-radius: 20px;
+    margin: 5px;
     font-weight: bold;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     margin-top: 10px;
+    height: 40px;
+    font-size: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
 }

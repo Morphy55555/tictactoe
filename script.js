@@ -60,6 +60,7 @@ const gameController = {
         tiles.forEach(index => {
             index.textContent = ''
         });
+        //Re add event listener
         document.body.addEventListener('click', display.onClick);
     },
 
@@ -124,14 +125,15 @@ const gameLogic = {
         ) {
             if (gameController.counter % 2 === 0) {
                 players.player2Score++;
-                alert("Player 2 is the weiner!");
+                alert("Player O is the weiner!");
+                //Remove tile event listener on win condition
                 document.body.removeEventListener('click', display.onClick);
             } else {
                 players.player1Score++;
-                alert("Player 1 is the weiner!");
+                alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
-            
+            return;
         }
 
         // Check columns
@@ -142,15 +144,15 @@ const gameLogic = {
         ) {
             if (gameController.counter % 2 === 0) {
                 players.player2Score++;
-                alert("Player 2 is the weiner!");
+                alert("Player O is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
 
             } else {
                 players.player1Score++;
-                alert("Player 1 is the weiner!");
+                alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
-
+            return;
 
         }
 
@@ -162,20 +164,20 @@ const gameLogic = {
             if (gameController.counter % 2 === 0) {
                 players.player2Score++;
 
-                alert("Player 2 is the weiner!");
+                alert("Player O is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             } else {
                 players.player1Score++;
-                alert("Player 1 is the weiner!");
+                alert("Player X is the weiner!");
                 document.body.removeEventListener('click', display.onClick);
             }
-
+            return;
 
         }
 
         if (gameBoard.board.every(index => index !== '')) {
-            alert('It\'s a draw, go agannnee!')
-
+            alert('It\'s a draw, go agannnee!');
+            return;
         }
         display.displayScore();
     }
