@@ -1,3 +1,5 @@
+
+
 container = document.querySelector('.container');
 resetBtn = document.querySelector('.resetBtn');
 
@@ -19,178 +21,155 @@ let gameBoard = (() => {
 })();
 console.log(gameBoard.board);
 
-
-const players = {
-    player1: 'x',
-    player2: 'o',
-    player1Score: 0,
-    player2Score: 0
+class Players {
+    constructor (){
+    this.player1 = 'x';
+    this.player2 = 'o';
+    this.player1Score = 0;
+    this.player2Score = 0;
+    }
 }
 
 
-const gameController = {
-    index: 0,
-    counter: 0,
-    //adds player symbol to the board, alternating between player with a counter++
-    playerMove: (index) => {
-        //if counter is even
-        if (gameController.counter % 2 === 0 &&
-            //and the array index is empty
-            gameBoard.board[index] === '') {
-            //add player 1 to the board
-            gameBoard.board[index] = players.player1;
-            gameController.counter++;
+const players = new Players();
+
+class GameController {
+    constructor(){
+    this.index = 0;
+    this.counter = 0;
+    }
 
 
-            //else if its odd and empty, add player 2
-        } else if (gameBoard.board[index] === '') {
-            gameBoard.board[index] = players.player2;
-            gameController.counter++;
-
-        } else return;
-        console.log(gameBoard.board);
-        console.log(gameController.counter);
-    },
-
-    resetBoard: () => {
-        gameBoard.board = [];
-        for (i = 0; i < 9; i++) {
-            gameBoard.board.push('');
-        }
-        tiles = document.querySelectorAll('.tiles');
-        tiles.forEach(index => {
-            index.textContent = ''
-        });
-        //Re add event listener 
-        document.body.addEventListener('click', display.onClick);
-    },
-
+playerMove(index) {
+    if (this.counter % 2 === 0 && gameBoard.board[index] === '') {
+        gameBoard.board[index] = players.player1;
+        this.counter++;
+    } else if (gameBoard.board[index] === '') {
+        gameBoard.board[index] = players.player2;
+        this.counter++;
+    } else return;
+    console.log(gameBoard.board);
+    console.log(this.counter);
 };
 
+resetBoard() {
+    gameBoard.board = [];
+    for (let i = 0; i < 9; i++) {
+        gameBoard.board.push('');
+    }
+    const tiles = document.querySelectorAll('.tiles');
+    tiles.forEach(index => {
+        index.textContent = '';
+    });
+    document.body.addEventListener('click', display.onClick);
+};
+}
 
+const gameController = new GameController();
 
+class Display {
 
-//Lastly adding corresponding image to the onscreen display
-let display = {
+onClick (e) {
+    const index = e.target.getAttribute('data-index');
+    const tile = document.querySelector(`[data-index='${index}']`);
+    console.log(`Tile clicked: ${index}`);
+    gameController.playerMove(index);
+    if (gameBoard.board[index] === "o" && !tile.firstChild) {
+        const img = document.createElement('img');
+        img.src = 'o.png';
+        img.alt = 'o';
+        img.width = 50;
+        tile.appendChild(img);
+    } else if (gameBoard.board[index] === "x" && !tile.firstChild) {
+        const img = document.createElement('img');
+        img.src = 'x.png';
+        img.alt = 'x';
+        img.width = 50;
+        img.height = 50;
+        tile.appendChild(img);
+    }
+    gameLogic.checkWin();
+};
 
+displayScore () {
+    const displayPlayer1Score = document.querySelector('#player1');
+    const displayPlayer2Score = document.querySelector('#player2');
+    displayPlayer1Score.textContent = players.player1Score;
+    displayPlayer2Score.textContent = players.player2Score;
+};
 
-    onClick: function (e) {
-        //On click get data attribbute of tile
-        let index = e.target.getAttribute('data-index');
-        //Select that specific tile with the data index
-        let tile = document.querySelector(`[data-index='${index}']`);
-        console.log(`Tile clicked: ${index}`);
-    
-
-        //Add either x or o into the tile (index) with the playermove function
-        gameController.playerMove(index);
-        //If the tile === o and there isn't an image there currently
-        //Add it to the display
-        if (gameBoard.board[index] === "o" && !tile.firstChild) {
-
-            const img = document.createElement('img');
-            img.src = 'o.png';
-            img.alt = 'o';
-            img.width = 50;
-            tile.appendChild(img);
-        } else if (gameBoard.board[index] === "x" && !tile.firstChild) {
-
-            const img = document.createElement('img');
-            img.src = 'x.png';
-            img.alt = 'x';
-            img.width = 50;
-            img.height = 50;
-            tile.appendChild(img);
-        }
-        gameLogic.checkWin()
-        
-    },
-    
-
-    displayScore: () => {
-        let displayPlayer1Score = document.querySelector('#player1');
-        let displayPlayer2Score = document.querySelector('#player2');
-        displayPlayer1Score.textContent = players.player1Score;
-        displayPlayer2Score.textContent = players.player2Score;
-    },
-
-    reset: resetBtn.addEventListener('click', () => {
+reset () {
+    resetBtn.addEventListener('click', () => {
         gameController.resetBoard();
-    }),
-
+    });
 };
+}
 
-const gameLogic = {
-    checkWin: () => {
-        // Check rows for matching x / o
-        if (
-            (gameBoard.board[0] === gameBoard.board[1] && gameBoard.board[1] === gameBoard.board[2] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[3] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[5] && gameBoard.board[3] !== '') ||
-            (gameBoard.board[6] === gameBoard.board[7] && gameBoard.board[7] === gameBoard.board[8] && gameBoard.board[6] !== '')
+const display = new Display();
+display.reset();
 
-        ) {
-            if (gameController.counter % 2 === 0) {
-                players.player2Score++;
-                alert("Player O is the weiner!");
-                //Remove tile event listener on win condition
-                document.body.removeEventListener('click', display.onClick);
-            } else {
-                players.player1Score++;
-                alert("Player X is the weiner!");
-                document.body.removeEventListener('click', display.onClick);
-            }
-            display.displayScore();
-            return;
+class GameLogic {
+
+checkWin() {
+    if (
+        (gameBoard.board[0] === gameBoard.board[1] && gameBoard.board[1] === gameBoard.board[2] && gameBoard.board[0] !== '') ||
+        (gameBoard.board[3] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[5] && gameBoard.board[3] !== '') ||
+        (gameBoard.board[6] === gameBoard.board[7] && gameBoard.board[7] === gameBoard.board[8] && gameBoard.board[6] !== '')
+    ) {
+        if (gameController.counter % 2 === 0) {
+            players.player2Score++;
+            document.body.removeEventListener('click', display.onClick);
+            alert("Player O is the weiner!");
+        } else {
+            players.player1Score++;
+            alert("Player X is the weiner!");
+            document.body.removeEventListener('click', display.onClick);
         }
+        display.displayScore();
+        return;
+    }
 
-        // Check columns
-        if (
-            (gameBoard.board[0] === gameBoard.board[3] && gameBoard.board[3] === gameBoard.board[6] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[1] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[7] && gameBoard.board[1] !== '') ||
-            (gameBoard.board[2] === gameBoard.board[5] && gameBoard.board[5] === gameBoard.board[8] && gameBoard.board[2] !== '')
-        ) {
-            if (gameController.counter % 2 === 0) {
-                players.player2Score++;
-                alert("Player O is the weiner!");
-                document.body.removeEventListener('click', display.onClick);
-
-            } else {
-                players.player1Score++;
-                alert("Player X is the weiner!");
-                document.body.removeEventListener('click', display.onClick);
-            }
-            display.displayScore();
-            return;
-
+    if (
+        (gameBoard.board[0] === gameBoard.board[3] && gameBoard.board[3] === gameBoard.board[6] && gameBoard.board[0] !== '') ||
+        (gameBoard.board[1] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[7] && gameBoard.board[1] !== '') ||
+        (gameBoard.board[2] === gameBoard.board[5] && gameBoard.board[5] === gameBoard.board[8] && gameBoard.board[2] !== '')
+    ) {
+        if (gameController.counter % 2 === 0) {
+            players.player2Score++;
+            document.body.removeEventListener('click', display.onClick);
+            alert("Player O is the weiner!");
+        } else {
+            players.player1Score++;
+            document.body.removeEventListener('click', display.onClick);
+            alert("Player X is the weiner!");
         }
+        display.displayScore();
+        return;
+    }
 
-        // Check diagonals
-        if (
-            (gameBoard.board[0] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[8] && gameBoard.board[0] !== '') ||
-            (gameBoard.board[2] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[6] && gameBoard.board[2] !== '')
-        ) {
-            if (gameController.counter % 2 === 0) {
-                players.player2Score++;
-
-                alert("Player O is the weiner!");
-                document.body.removeEventListener('click', display.onClick);
-            } else {
-                players.player1Score++;
-                alert("Player X is the weiner!");
-                document.body.removeEventListener('click', display.onClick);
-            }
-            display.displayScore();
-            return;
-
+    if (
+        (gameBoard.board[0] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[8] && gameBoard.board[0] !== '') ||
+        (gameBoard.board[2] === gameBoard.board[4] && gameBoard.board[4] === gameBoard.board[6] && gameBoard.board[2] !== '')
+    ) {
+        if (gameController.counter % 2 === 0) {
+            players.player2Score++;
+            document.body.removeEventListener('click', display.onClick);
+            alert("Player O is the weiner!");
+        } else {
+            players.player1Score++;
+            document.body.removeEventListener('click', display.onClick);
+            alert("Player X is the weiner!");
         }
-        //If all gameboard[] are not empty, its a draw, go aganeeee
-        if (gameBoard.board.every(index => index !== '')) {
-            alert('It\'s a draw, go agannnee!');
-            return;
-        }
-        
+        display.displayScore();
+        return;
+    }
+
+    if (gameBoard.board.every(index => index !== '')) {
+        alert('It\'s a draw, go agannnee!');
+        return;
     }
 };
+}
+const gameLogic = new GameLogic();
 document.body.addEventListener('click', display.onClick);
-
 
